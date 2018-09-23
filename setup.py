@@ -25,10 +25,13 @@ setup(
     include_package_data=True,
     install_requires=[
         'sanic==0.8.3',
-        'pytest==3.8.1'
+        'pytest==3.8.1',
+        'macss-medical-ie==' + _get_github_sha(
+            'git+git://github.com/ChristophAlt/macss-medical-ie.git#egg=macss-medical-ie')
     ],
     dependency_links=[
-        
+        'git+git://github.com/ChristophAlt/macss-medical-ie.git#egg=macss-medical-ie-' + _get_github_sha(
+            'git+git://github.com/ChristophAlt/macss-medical-ie.git#egg=macss-medical-ie')
     ],
     package_data={
         '': ['*.*'],

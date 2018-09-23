@@ -8,7 +8,7 @@ from macss_webservice.app.app_core import app_endpoints
 app = Sanic(__name__)
 app.blueprint(app_endpoints)
 
-app.config.update(webservice_settings.WEBAPP_CONFIG)
+app.config.update(webservice_settings.CONFIG_WEBAPP)
 
 info(f"List of active endpoints { app.router.routes_all.keys() }")
 

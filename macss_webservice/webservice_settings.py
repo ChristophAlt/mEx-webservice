@@ -43,11 +43,11 @@ def envint(varname: str, default: int) -> int:
 # SERVER configuration
 CONFIG_SERVER = dict(
     host=os.getenv("MACSS_WEBSERVICE_HOST", "0.0.0.0"),
-    port=envint("MACSS_WEBSERVICE_PORT", 5050), debug=True, auto_reload=False, workers=1, log_config=LOGGING,
+    port=envint("MACSS_WEBSERVICE_PORT", 5050), debug=True, workers=1, log_config=LOGGING,
 )
 
 # WEBAPP configuration
-WEBAPP_CONFIG = dict(
+CONFIG_WEBAPP = dict(
     REQUEST_MAX_SIZE=envint("MACSS_WEBSERVICE_REQUEST_MAX_SIZE", int(100 * 1e6)),  # 100 megabytes
     REQUEST_TIMEOUT=envint("MACSS_WEBSERVICE_REQUEST_TIMEOUT", 600),  # 10 min
     KEEP_ALIVE=True,
@@ -55,3 +55,5 @@ WEBAPP_CONFIG = dict(
     WEBSOCKET_MAX_SIZE=envint("MACSS_WEBSERVICE_WEBSOCKET_MAX_SIZE", int(1e6)),  # 1 megabyte
     WEBSOCKET_MAX_QUEUE=envint("MACSS_WEBSERVICE_WEBSOCKET_MAX_QUEUE", 32)
 )
+
+HOSTNAME = os.getenv('MACSS_HOSTNAME', "DEV_SERVER")
