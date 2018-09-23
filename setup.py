@@ -13,7 +13,7 @@ def _get_github_sha(github_install_url: str):
     repository = Path(github_install_url).stem.split('#egg', 1)[0]
     organisation = Path(github_install_url).parent.stem
     github_access_token = os.getenv('GITHUB_ACCESS_TOKEN')
-    with urllib.request.urlopen(f'https://api.github.com/repos/{organisation}/{repository}/commits/master?{github_access_token}') as response:
+    with urllib.request.urlopen(f'https://api.github.com/repos/{organisation}/{repository}/commits/master?access_token={github_access_token}') as response:
         return json.loads(response.read())['sha']
 
 
@@ -29,13 +29,14 @@ setup(
         'sanic==0.8.3',
         'pytest==3.8.1',
         'macss-medical-ie==' + _get_github_sha(
-            'git+git://github.com/ChristophAlt/macss-medical-ie.git#egg=macss-medical-ie')
+            'git+ssh://git@github.com/ChristophAlt/macss-medical-ie.git#egg=macss-medical-ie')
     ],
     dependency_links=[
-        'git+git://github.com/ChristophAlt/macss-medical-ie.git#egg=macss-medical-ie-' + _get_github_sha(
-            'git+git://github.com/ChristophAlt/macss-medical-ie.git#egg=macss-medical-ie')
+        'git+ssh://git@github.com/ChristophAlt/macss-medical-ie.git#egg=macss-medical-ie-' + _get_github_sha(
+            'git+ssh://git@github.com/ChristophAlt/macss-medical-ie.git#egg=macss-medical-ie')
     ],
     package_data={
         '': ['*.*'],
     },
 )
+
