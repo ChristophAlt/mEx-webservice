@@ -1,3 +1,4 @@
+import os
 from package_settings import NAME, VERSION, PACKAGES, DESCRIPTION
 from setuptools import setup
 from pathlib import Path
@@ -11,7 +12,8 @@ def _get_github_sha(github_install_url: str):
     """From the github_install_url get the hash of the latest commit"""
     repository = Path(github_install_url).stem.split('#egg', 1)[0]
     organisation = Path(github_install_url).parent.stem
-    with urllib.request.urlopen(f'https://api.github.com/repos/{organisation}/{repository}/commits/master') as response:
+    github_access_token = os.getenv('GITHUB_ACCESS_TOKEN')
+    with urllib.request.urlopen(f'https://api.github.com/repos/{organisation}/{repository}/commits/master?{github_access_token}') as response:
         return json.loads(response.read())['sha']
 
 
