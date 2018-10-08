@@ -11,15 +11,6 @@ FORMATTER = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 
 LOGGING = dict(LOGGING_CONFIG_DEFAULTS)
 
-# # Remove file and syslog logging, handled from stdout
-# LOGGING['handlers'].pop('errorTimedRotatingFile', None)
-# LOGGING['handlers'].pop('accessTimedRotatingFile', None)
-# LOGGING['handlers'].pop('accessSysLog', None)
-# LOGGING['handlers'].pop('errorSysLog', None)
-
-# # Handled by the root logger
-# LOGGING['loggers'].pop('sanic', None)
-
 LOGGING["formatters"]['stream_formatter'] = {
     'format': FORMATTER,
     'datefmt': '%Y-%m-%d %H:%M:%S',
@@ -29,8 +20,6 @@ LOGGING['handlers']['stream_handler'] = {
     'formatter': 'stream_formatter',
     'stream': sys.stderr
 }
-
-# LOGGING['loggers']['network']['handlers'] = ['accessStream']
 
 LOGGING['loggers']['root'] = {'level': os.environ.get("LOGLEVEL", "INFO").upper(),
                               'handlers': ['stream_handler']}

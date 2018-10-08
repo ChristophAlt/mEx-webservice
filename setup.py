@@ -22,7 +22,7 @@ setup(
     version=VERSION,
     long_description=DESCRIPTION,
     author='Christoph Alt',
-    author_email='christoph.alt@dfki.de',
+    author_email='christoph.alt@posteo.de',
     packages=PACKAGES,
     include_package_data=True,
     install_requires=[
@@ -39,4 +39,3 @@ setup(
         '': ['*.*'],
     },
 )
-
