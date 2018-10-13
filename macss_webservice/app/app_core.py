@@ -7,7 +7,7 @@ from macss_webservice.app.app_settings import app_endpoints
 from macss_webservice.app.app_middleware import respond_with_json
 from macss_webservice.api_helpers.exception import UserException
 from macss_webservice.webservice_settings import CONFIG_SERVER, HOSTNAME
-from macss_webservice.api_helpers.input import required_parameter
+from macss_webservice.api_helpers.input import required_json_field
 from macss_medical_ie.macss_medical_ie_pipeline import MedicalIEPipeline
 from macss_medical_ie.pipeline.normalization import normalize_text
 from macss_medical_ie.utils.document_helper import doc_to_brat
@@ -25,9 +25,16 @@ def _test(request):
 @_endpoint_route('/annotate')
 @respond_with_json
 def _annotate(request):
+    required_json_field(request, 'text')
+
     text = normalize_text(request.json['text'])
     doc = MedicalIEPipeline.get_annotated_document(text)
-    return doc_to_brat(doc)
+
+    brat = doc_to_brat(doc,
+                       selected_ents=request.json.get('ner', {}).get('tags'),
+                       selected_rels=request.json.get('re', {}).get('tags'))
+
+    return brat
 
 
 @_endpoint_route('/pipeline')
@@ -38,12 +45,15 @@ def _pipeline(request):
         if name == 'ner':
             available_tags = component.tagger.tag_dictionary.get_items()
             available_tags = [tag.split('-')[-1].lower() for tag in available_tags]
-            available_tags = [tag for tag in available_tags if tag not in ['<unk>', 'o', '<start>', '<stop>']]
+            # TODO: change tag filtering as soon as data is fixed (nn, adv)
+            available_tags = [tag.upper() for tag in available_tags if tag not in ['<unk>', 'o', '<start>', '<stop>', 'nn', 'adv']]
             component_info['available_tags'] = list(set(available_tags))
 
         elif name == 'relation_extraction':
+            # temporary fix
+            name = 're'
             available_tags = component.clf.label_dictionary.get_items()
-            available_tags = [tag[:-7].lower() for tag in available_tags]
+            available_tags = [tag[:-7].upper() for tag in available_tags if not tag.lower().startswith('not')]
             component_info['available_tags'] = list(set(available_tags))
 
         return component_info
