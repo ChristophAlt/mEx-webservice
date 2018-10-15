@@ -30,9 +30,15 @@ def _annotate(request):
     text = normalize_text(request.json['text'])
     doc = MedicalIEPipeline.get_annotated_document(text)
 
+    selected_ents = request.json.get('ner', {}).get('lstm') or []
+    selected_ents = [e.upper() for e in selected_ents]
+
+    selected_rels = request.json.get('re', {}).get('cnn') or []
+    selected_rels = [r.upper() for r in selected_rels]
+
     brat = doc_to_brat(doc,
-                       selected_ents=request.json.get('ner', {}).get('tags'),
-                       selected_rels=request.json.get('re', {}).get('tags'))
+                       selected_ents=selected_ents,
+                       selected_rels=selected_rels)
 
     return brat
 
