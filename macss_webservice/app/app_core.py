@@ -30,15 +30,26 @@ def _annotate(request):
     text = normalize_text(request.json['text'])
     doc = MedicalIEPipeline.get_annotated_document(text)
 
+    # TODO: remove this hack!
     selected_ents = request.json.get('ner', {}).get('lstm') or []
     selected_ents = [e.upper() for e in selected_ents]
 
     selected_rels = request.json.get('re', {}).get('cnn') or []
     selected_rels = [r.upper() for r in selected_rels]
 
+    selected_negation = request.json.get('neg', {}).get('negex') or []
+    selected_normalization = request.json.get('norm', {}).get('norm') or []
+
+    enable_negation = len(selected_negation) > 0
+    enable_candidate_search = 'candidate' in selected_normalization
+    enable_wsd = 'wsd' in selected_normalization
+
     brat = doc_to_brat(doc,
                        selected_ents=selected_ents,
-                       selected_rels=selected_rels)
+                       selected_rels=selected_rels,
+                       enable_negation=enable_negation,
+                       enable_candidate_search=enable_candidate_search,
+                       enable_wsd=enable_wsd)
 
     return brat
 
