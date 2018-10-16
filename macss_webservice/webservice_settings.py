@@ -29,10 +29,20 @@ def envint(varname: str, default: int) -> int:
     return int(os.getenv(varname, default))
 
 
+def envbool(varname: str, default: bool) -> bool:
+    var = os.getenv(varname, default)
+    if isinstance(var, str):
+        var = var.lower() in ['true', 'yes', '1', 't', 'y']
+    return var
+
+
 # SERVER configuration
 CONFIG_SERVER = dict(
     host=os.getenv("MACSS_WEBSERVICE_HOST", "0.0.0.0"),
-    port=envint("MACSS_WEBSERVICE_PORT", 5050), debug=True, workers=1, log_config=LOGGING,
+    port=envint("MACSS_WEBSERVICE_PORT", 5050),
+    debug=envbool("MACSS_WEBSERVICE_DEBUG", False),
+    workers=envint("MACSS_WEBSERVICE_WORKERS", 1),
+    log_config=LOGGING,
 )
 
 # WEBAPP configuration

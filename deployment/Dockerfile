@@ -26,7 +26,7 @@ ARG GITHUB_ACCESS_TOKEN
 ARG SPACY_LANG=de
 
 RUN pip3 install -vv --process-dependency-links --upgrade git+https://$GITHUB_ACCESS_TOKEN:@github.com/ChristophAlt/macss-webservice
-RUN python3 -m spacy install $SPACY_LANG
+RUN python3 -m spacy download $SPACY_LANG
 
 #Run model tests
 #RUN pytest -vs
