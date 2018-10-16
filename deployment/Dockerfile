@@ -23,8 +23,10 @@ WORKDIR /mnt/
 #Argument to rebuild from this point after an update
 ARG COMMIT_SHA1=1
 ARG GITHUB_ACCESS_TOKEN
+ARG SPACY_LANG=de
 
-RUN pip3 install --process-dependency-links --upgrade git+https://$GITHUB_ACCESS_TOKEN:@github.com/ChristophAlt/macss-webservice
+RUN pip3 install -vv --process-dependency-links --upgrade git+https://$GITHUB_ACCESS_TOKEN:@github.com/ChristophAlt/macss-webservice
+RUN python3 -m spacy install $SPACY_LANG
 
 #Run model tests
 #RUN pytest -vs
